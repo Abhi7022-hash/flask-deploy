@@ -21,6 +21,14 @@
         - python3-pip
         - python3-venv
 
+    - name: Create target app directory
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        mode: '0755'
+        owner: ubuntu
+        group: ubuntu
+
     - name: Copy Flask app to server
       copy:
         src: flask-app/
@@ -39,7 +47,7 @@
         requirements: "{{ app_dir }}/requirements.txt"
         virtualenv: "{{ venv_dir }}"
 
-    - name: Start Flask app
+    - name: Start Flask app in background
       shell: |
         source {{ venv_dir }}/bin/activate
         nohup python3 {{ app_dir }}/app.py > flask.log 2>&1 &
